@@ -3,18 +3,44 @@ import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, trim: true },
-    email: {
-      type: String, required: true, unique: true,
-      lowercase: true, trim: true,
+    name: {
+      type: String,
+      required: [true, 'Name is required'],
+      trim: true,
+      maxlength: [50, 'Name cannot exceed 50 characters'],
     },
-    password: { type: String, required: true, minlength: 6 },
-    phone: { type: String, trim: true },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email'],
+    },
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      minlength: [6, 'Password must be at least 6 characters'],
+      select: false, // never returned in queries by default
+    },
+    phone: {
+      type: String,
+      trim: true,
+      match: [/^[+]?[\d\s-]{7,15}$/, 'Please enter a valid phone number'],
+    },
     role: {
-      type: String, enum: ['client', 'stylist', 'admin'],
+      type: String,
+      enum: ['client', 'stylist', 'admin'],
       default: 'client',
     },
-    avatar: { type: String, default: '' }, // Cloudinary URL or Unsplash placeholder
+    avatar: {
+      type: String,
+      default: '',
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
@@ -26,7 +52,7 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Compare method for login
+// Compare entered password with hashed
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

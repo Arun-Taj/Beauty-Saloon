@@ -1,4 +1,5 @@
 import express from 'express';
+//import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -6,9 +7,9 @@ import morgan from 'morgan';
 import connectDB from './config/db.js';
 import { globalErrorHandler } from './utils/errorHandler.js';
 
-import authRoutes        from './routes/auth.routes.js';
-import serviceRoutes     from './routes/service.routes.js';
-import appointmentRoutes from './routes/appointment.routes.js';
+import authRoutes        from './routes/authRoutes.js';
+import serviceRoutes     from './routes/serviceRoutes.js';
+import appointmentRoutes from './routes/appointmentRoutes.js';
 
 dotenv.config();
 connectDB();
