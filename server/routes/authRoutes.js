@@ -7,6 +7,7 @@ import {
   changePassword,
   getAllUsers,
   getStylists,
+  createStylist,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { adminOnly } from '../middleware/adminMiddleware.js';
@@ -16,6 +17,7 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login',    login);
 router.get('/stylists',  getStylists);          // public — booking wizard needs this
+router.post('/stylists', protect, adminOnly, createStylist);
 
 router.get('/me',              protect, getMe);
 router.put('/profile',         protect, updateProfile);

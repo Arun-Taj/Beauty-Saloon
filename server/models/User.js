@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email'],
+      
     },
     password: {
       type: String,
@@ -26,7 +27,8 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       trim: true,
-      match: [/^[+]?[\d\s-]{7,15}$/, 'Please enter a valid phone number'],
+      //match: [/^[+]?[\d\s-]{7,15}$/, 'Please enter a valid phone number'],
+      match: [/^(?:\+977[-\s]?)?9[78]\d{2}[-\s]?\d{6}$/,'Please enter a valid Nepali phone number']
     },
     role: {
       type: String,
@@ -46,11 +48,13 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+//Modern Approach
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+
   this.password = await bcrypt.hash(this.password, 12);
-  next();
 });
+
 
 // Compare entered password with hashed
 userSchema.methods.matchPassword = async function (enteredPassword) {

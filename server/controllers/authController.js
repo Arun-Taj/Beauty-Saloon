@@ -140,3 +140,36 @@ export const getStylists = async (req, res, next) => {
     next(error);
   }
 };
+// @desc    Create a stylist (admin only)
+// @route   POST /api/auth/stylists
+// @access  Private/Admin
+export const createStylist = async (req, res, next) => {
+  try {
+    const { name, email, password, phone, avatar } = req.body;
+
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return sendError(res, 400, 'Email already registered');
+    }
+
+    const stylist = await User.create({
+      name,
+      email,
+      password: password || 'stylist123', // default password if not provided
+      phone,
+      avatar,
+      role: 'stylist',
+    });
+
+    return sendSuccess(res, 201, {
+      _id: stylist._id,
+      name: stylist.name,
+      email: stylist.email,
+      role: stylist.role,
+      phone: stylist.phone,
+      avatar: stylist.avatar,
+    }, 'Stylist created successfully');
+  } catch (error) {
+    next(error);
+  }
+};
