@@ -8,11 +8,22 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuthStore();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleNavClick = (to) => {
+    setMenuOpen(false);
+    navigate(to);
+  };
+
+  const isActiveLink = (to) => {
+    if (to === '/') return pathname === '/' && !hash;
+    if (to.startsWith('/#')) return pathname === '/' && hash === to.slice(1);
+    return pathname === to;
   };
 
   const navLinks = [
@@ -36,14 +47,16 @@ const Navbar = () => {
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map(({ label, to }) => (
-            <a
+            <button
               key={label}
-              href={to}
+              type="button"
+              onClick={() => handleNavClick(to)}
               className={`text-sm font-sans transition-colors hover:text-gold-500 ${
-                pathname === to ? 'text-gold-500' : 'text-charcoal-600'
-              }`}>   
+                isActiveLink(to) ? 'text-gold-500' : 'text-charcoal-600'
+              }`}
+            >
               {label}
-            </a>
+            </button>
           ))}
         </div>
 
@@ -88,14 +101,16 @@ const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-cream-200 px-4 py-4 flex flex-col gap-4">
           {navLinks.map(({ label, to }) => (
-            <a
+            <button
               key={label}
-              href={to}
-              className="text-charcoal-700 font-sans text-sm"
-              onClick={() => setMenuOpen(false)}
+              type="button"
+              className={`text-left font-sans text-sm ${
+                isActiveLink(to) ? 'text-gold-500' : 'text-charcoal-700'
+              }`}
+              onClick={() => handleNavClick(to)}
             >
               {label}
-            </a>
+            </button>
           ))}
           <hr className="border-cream-200" />
           {isAuthenticated ? (

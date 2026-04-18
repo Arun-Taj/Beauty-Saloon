@@ -19,7 +19,15 @@ export const useAuthStore = create(
     }),
     {
       name: 'beauty-auth', // key in localStorage
-      partialize: (state) => ({ user: state.user, token: state.token }),
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        state.isAuthenticated = Boolean(state.token);
+      },
     }
   )
 );
