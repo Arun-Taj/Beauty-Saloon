@@ -12,6 +12,23 @@ const STATUS_COLORS = {
 
 const STATUSES = ['All', 'pending', 'confirmed', 'completed', 'cancelled'];
 
+const getAppointmentTimestamp = (apt) => {
+  const dt = new Date(apt.date);
+  const [hours, minutes] = (apt.timeSlot || '00:00').split(':').map(Number);
+  dt.setHours(hours || 0, minutes || 0, 0, 0);
+  return dt.getTime();
+};
+
+const sortAppointments = (items) =>
+  [...items].sort((a, b) => {
+    const aCancelled = a.status === 'cancelled';
+    const bCancelled = b.status === 'cancelled';
+
+    if (aCancelled !== bCancelled) return aCancelled ? 1 : -1;
+
+    return getAppointmentTimestamp(a) - getAppointmentTimestamp(b);
+  });
+
 const AppointmentTable = () => {
   const [appointments, setAppointments] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -26,7 +43,7 @@ const AppointmentTable = () => {
       const params = { page, limit: 10 };
       if (filter !== 'All') params.status = filter;
       const res = await bookingService.getAll(params);
-      setAppointments(res.data.data.appointments);
+      setAppointments(sortAppointments(res.data.data.appointments));
       setPagination(res.data.data.pagination);
     } finally {
       setLoading(false);

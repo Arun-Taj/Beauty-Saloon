@@ -88,7 +88,7 @@ const ServiceMenu = () => {
                       <span className="flex items-center gap-1"><DollarSign size={14} className="text-gold-500" />{service.price}</span>
                       <span className="flex items-center gap-1"><Clock size={14} className="text-gold-500" />{service.duration}min</span>
                     </div>
-                    <Link to="/booking">
+                    <Link to="/booking" state={{ preselectedService: service }}>
                       <Button size="sm" variant="outline">Book</Button>
                     </Link>
                   </div>

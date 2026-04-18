@@ -1,15 +1,30 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useBookingStore } from '@/store/useBookingStore';
 import BookingWizard from '@/components/booking/BookingWizard';
 
 const Booking = () => {
   const { isAuthenticated } = useAuthStore();
+  const { setService, setStep } = useBookingStore();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const preselectedService = location.state?.preselectedService;
 
   useEffect(() => {
-    if (!isAuthenticated) navigate('/login', { state: { from: { pathname: '/booking' } } });
-  }, [isAuthenticated]);
+    if (!isAuthenticated || !preselectedService) return;
+    setService(preselectedService);
+    setStep(2);
+  }, [isAuthenticated, preselectedService, setService, setStep]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', {
+        state: { from: { pathname: '/booking', state: { preselectedService } } },
+      });
+    }
+  }, [isAuthenticated, navigate, preselectedService]);
 
   return (
     <div className="min-h-screen bg-cream-50 pt-24 pb-16">
