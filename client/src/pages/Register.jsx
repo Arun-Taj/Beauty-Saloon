@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Scissors } from 'lucide-react';
+import { Scissors, Eye, EyeOff } from 'lucide-react';
 import { authService } from '@/services/authService';
 import { useAuthStore } from '@/store/useAuthStore';
 import Button from '@/components/common/Button';
@@ -11,6 +11,7 @@ const Register = () => {
   const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +64,25 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {field('name',     'Full Name',    'text',     'Jane Cooper')}
             {field('email',    'Email',        'email',    'jane@example.com')}
-            {field('password', 'Password',     'password', '6+ characters')}
+            <div className="relative">
+              <label className="block text-sm font-sans text-charcoal-600 mb-1">Password</label>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder="6+ characters"
+                className="w-full px-4 py-3 pr-12 rounded-xl border border-cream-200 font-sans text-charcoal-700 focus:outline-none focus:ring-2 focus:ring-gold-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                className="absolute right-3 top-[38px] text-charcoal-500 hover:text-charcoal-700"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
             {field('phone',    'Phone (optional)', 'tel', '+1 234 567 890')}
             <Button type="submit" loading={loading} className="w-full">
               Create Account
