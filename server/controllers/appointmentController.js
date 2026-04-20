@@ -162,7 +162,7 @@ export const getAllAppointments = async (req, res, next) => {
       .populate('client', 'name email phone')
       .populate('stylist', 'name avatar')
       .populate('service', 'name category price duration')
-      .sort({ date: -1 })
+      .sort({ date: 1, timeSlot: 1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
