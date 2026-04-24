@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import Button from '@/components/common/Button';
-import Bg from '../../assets/bg2.jpeg'
+import Bg from '../../assets/Bg2.jpeg'
 
 const Hero = () => (
   <section className="relative min-h-screen flex items-center overflow-hidden">
