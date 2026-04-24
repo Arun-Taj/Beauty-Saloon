@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { LayoutDashboard, Calendar, Scissors, LogOut, Sparkles, BarChart3 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
-import StatsOverview from '@/components/dashboard/StatsOverview';
+import StatsOverview from '@/components/dashboard/StatsOverView';
 import AppointmentTable from '@/components/dashboard/AppointmentTable';
 import ServiceEditor from '@/components/dashboard/ServiceEditor';
 

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useBookingStore } from '@/store/useBookingStore';
-import BookingWizard from '@/components/booking/BookingWizard';
+import BookingWizard from '@/components/booking/Bookingwizard';
 
 const Booking = () => {
   const { isAuthenticated } = useAuthStore();
