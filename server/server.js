@@ -18,10 +18,34 @@ const app = express();
 
 // ── Security & utility middleware ──────────────────────────────────────────
 app.use(helmet());
-app.use(cors({
-  origin: process.env.CLIENT_URL,
+// app.use(cors({
+//   origin: process.env.CLIENT_URL,
+//   credentials: true,
+// }));
+const allowedOrigins = [
+  'https://soniya-beauty-saloon.netlify.app',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman, mobile apps)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-}));
+};
+
+app.use(cors(corsOptions));
+// app.options('/*', cors(corsOptions));
+
+
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 app.use(express.json({ limit: '10kb' }));      // body size guard
 app.use(express.urlencoded({ extended: true }));
