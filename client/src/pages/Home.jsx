@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Hero from '@/components/landing/Hero';
 import ServiceMenu from '@/components/landing/ServiceMenu';
-import Lookbook from '@/components/landing/Lookbook';
+import Lookbook from '@/components/landing/LookBook';
 import Testimonials from '@/components/landing/Testimonials';
 
 const Home = () => {
